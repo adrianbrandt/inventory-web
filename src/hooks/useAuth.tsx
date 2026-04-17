@@ -28,7 +28,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     await apiLogout();
-    qc.clear();
+    qc.setQueryData(['auth-me'], null);
+    qc.removeQueries({ queryKey: ['parts'] });
+    qc.removeQueries({ queryKey: ['stats'] });
   };
 
   return <AuthContext.Provider value={{ user: data ?? null, loading: isPending, login, logout }}>{children}</AuthContext.Provider>;
