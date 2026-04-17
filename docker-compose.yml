@@ -1,0 +1,7 @@
+services:
+  web:
+    build: .
+    environment:
+      API_URL: http://srv-captain--inventory-api:3001
+    ports:
+      - "8080:80"
