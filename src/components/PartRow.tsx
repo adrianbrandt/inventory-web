@@ -54,10 +54,10 @@ export default function PartRow({ part, visibleColumns, onUpdate, onDelete }: Pr
         {visibleColumns.has('createdAt') && <td />}
         <td style={{ padding: '8px 12px' }}>
           <div style={{ display: 'flex', gap: 6 }}>
-            <button className="btn-primary" onClick={save} style={{ fontSize: 12, padding: '3px 10px' }}>Lagre</button>
-            <button className="btn-ghost" onClick={cancel} style={{ fontSize: 12, padding: '3px 10px' }}>Avbryt</button>
+            <button className="btn-primary" onClick={save} style={{ fontSize: 12, padding: '3px 10px' }}>Save</button>
+            <button className="btn-ghost" onClick={cancel} style={{ fontSize: 12, padding: '3px 10px' }}>Cancel</button>
             <button className="btn-danger" onClick={handleDelete} style={{ fontSize: 12, padding: '3px 10px' }}>
-              {confirmDelete ? 'Bekreft?' : 'Slett'}
+              {confirmDelete ? 'Confirm?' : 'Delete'}
             </button>
           </div>
         </td>
@@ -73,9 +73,21 @@ export default function PartRow({ part, visibleColumns, onUpdate, onDelete }: Pr
       {visibleColumns.has('vendor') && <td style={{ padding: '8px 12px' }}>{part.vendor ? <VendorBadge vendor={part.vendor} /> : <span style={{ color: 'var(--muted)' }}>—</span>}</td>}
       {visibleColumns.has('location') && <td style={{ padding: '8px 12px', color: 'var(--muted)', fontSize: 12 }}>{part.location ?? '—'}</td>}
       {visibleColumns.has('notes') && <td style={{ padding: '8px 12px', color: 'var(--muted)', fontSize: 12 }}>{part.notes ?? '—'}</td>}
-      {visibleColumns.has('createdAt') && <td style={{ padding: '8px 12px', color: 'var(--muted)', fontSize: 11, fontFamily: "'IBM Plex Mono', monospace" }}>{new Date(part.createdAt).toLocaleDateString('nb-NO')}</td>}
+      {visibleColumns.has('createdAt') && <td style={{ padding: '8px 12px', color: 'var(--muted)', fontSize: 11, fontFamily: "'IBM Plex Mono', monospace" }}>{new Date(part.createdAt).toLocaleDateString('en-GB')}</td>}
       <td style={{ padding: '8px 12px' }} onClick={e => e.stopPropagation()}>
-        <button className="btn-ghost" disabled={part.quantity === 0} onClick={() => onUpdate(part.id, { quantity: part.quantity - 1 })} style={{ fontSize: 11, padding: '2px 8px' }}>Bruk</button>
+        <div style={{ display: 'flex', gap: 4 }}>
+          <button
+            className="btn-ghost"
+            disabled={part.quantity === 0}
+            onClick={() => onUpdate(part.id, { quantity: part.quantity - 1 })}
+            style={{ fontSize: 11, padding: '2px 7px', color: 'var(--red)', borderColor: 'var(--red)' }}
+          >-1</button>
+          <button
+            className="btn-ghost"
+            onClick={() => onUpdate(part.id, { quantity: part.quantity + 1 })}
+            style={{ fontSize: 11, padding: '2px 7px', color: 'var(--green)', borderColor: 'var(--green)' }}
+          >+1</button>
+        </div>
       </td>
     </tr>
   );
