@@ -6,8 +6,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     headers: { 'Content-Type': 'application/json', ...init?.headers },
   });
   if (!res.ok) {
-    const body = await res.json().catch(() => ({ error: 'Ukjent feil' }));
-    throw new Error((body as { error?: string }).error ?? 'Ukjent feil');
+    const body = await res.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error((body as { error?: string }).error ?? 'Unknown error');
   }
   if (res.status === 204) return undefined as T;
   return res.json() as Promise<T>;
