@@ -11,10 +11,14 @@ export function sortParts(parts: Part[], key: SortKey | null, dir: SortDir): Par
     if (av == null && bv == null) return 0;
     if (av == null) return 1;
     if (bv == null) return -1;
-    const cmp =
-      typeof av === 'string' && typeof bv === 'string'
-        ? av.localeCompare(bv, undefined, { sensitivity: 'base' })
-        : (av as number) - (bv as number);
+    let cmp: number;
+    if (key === 'createdAt') {
+      cmp = new Date(av as string).getTime() - new Date(bv as string).getTime();
+    } else if (typeof av === 'string' && typeof bv === 'string') {
+      cmp = av.localeCompare(bv, undefined, { sensitivity: 'base' });
+    } else {
+      cmp = (av as number) - (bv as number);
+    }
     return dir === 'asc' ? cmp : -cmp;
   });
 }

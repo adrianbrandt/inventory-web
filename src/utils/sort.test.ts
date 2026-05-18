@@ -48,7 +48,7 @@ describe('sortParts', () => {
       makePart({ id: 3, name: 'A' }),
     ];
     const result = sortParts(withNull, 'name', 'asc');
-    expect(result[2].id).toBe(2);
+    expect(result.map(p => p.id)).toEqual([3, 1, 2]);
   });
 
   it('sorts null values to the bottom in descending order', () => {
@@ -58,12 +58,16 @@ describe('sortParts', () => {
       makePart({ id: 3, name: 'A' }),
     ];
     const result = sortParts(withNull, 'name', 'desc');
-    expect(result[2].id).toBe(2);
+    expect(result.map(p => p.id)).toEqual([1, 3, 2]);
   });
 
   it('does not mutate the original array', () => {
     const ids = parts.map(p => p.id);
     sortParts(parts, 'partNumber', 'asc');
     expect(parts.map(p => p.id)).toEqual(ids);
+  });
+
+  it('returns empty array when input is empty', () => {
+    expect(sortParts([], 'partNumber', 'asc')).toEqual([]);
   });
 });
