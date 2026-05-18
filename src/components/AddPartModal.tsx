@@ -28,7 +28,7 @@ export default function AddPartModal({ onClose, onSubmit }: Props) {
       await onSubmit({ partNumber, quantity, name: name || undefined, vendor: vendor || undefined, location: location || undefined, notes: notes || undefined });
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ukjent feil');
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -37,29 +37,29 @@ export default function AddPartModal({ onClose, onSubmit }: Props) {
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#000a', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200 }} onClick={onClose}>
       <form onSubmit={handleSubmit} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', padding: 28, width: '100%', maxWidth: 440 }} onClick={e => e.stopPropagation()}>
-        <h3 style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 12, letterSpacing: '0.08em', marginBottom: 20, color: 'var(--accent)' }}>LEGG TIL DEL</h3>
+        <h3 style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 12, letterSpacing: '0.08em', marginBottom: 20, color: 'var(--accent)' }}>ADD PART</h3>
 
         <div style={field}>
-          <label style={labelStyle}>Delenummer *</label>
-          <input value={partNumber} onChange={e => setPartNumber(e.target.value)} placeholder="Delenummer" autoFocus style={{ width: '100%' }} />
+          <label style={labelStyle}>Part Number *</label>
+          <input value={partNumber} onChange={e => setPartNumber(e.target.value)} placeholder="Part number" autoFocus style={{ width: '100%' }} />
         </div>
         <div style={field}>
-          <label style={labelStyle}>Antall *</label>
-          <input type="number" value={quantity} onChange={e => setQuantity(Number(e.target.value))} placeholder="Antall" min={0} style={{ width: '100%' }} />
+          <label style={labelStyle}>Quantity *</label>
+          <input type="number" value={quantity} onChange={e => setQuantity(Number(e.target.value))} min={0} style={{ width: '100%' }} />
         </div>
 
         <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '16px 0' }} />
 
-        <div style={field}><label style={labelStyle}>Navn</label><input value={name} onChange={e => setName(e.target.value)} placeholder="Navn" style={{ width: '100%' }} /></div>
-        <div style={field}><label style={labelStyle}>Leverandør</label><input value={vendor} onChange={e => setVendor(e.target.value)} placeholder="Leverandør" style={{ width: '100%' }} /></div>
-        <div style={field}><label style={labelStyle}>Lokasjon</label><input value={location} onChange={e => setLocation(e.target.value)} placeholder="Lokasjon" style={{ width: '100%' }} /></div>
-        <div style={field}><label style={labelStyle}>Notater</label><textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Notater" rows={2} style={{ width: '100%', resize: 'vertical' }} /></div>
+        <div style={field}><label style={labelStyle}>Name</label><input value={name} onChange={e => setName(e.target.value)} placeholder="Name" style={{ width: '100%' }} /></div>
+        <div style={field}><label style={labelStyle}>Vendor</label><input value={vendor} onChange={e => setVendor(e.target.value)} placeholder="Vendor" style={{ width: '100%' }} /></div>
+        <div style={field}><label style={labelStyle}>Location</label><input value={location} onChange={e => setLocation(e.target.value)} placeholder="Location" style={{ width: '100%' }} /></div>
+        <div style={field}><label style={labelStyle}>Notes</label><textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Notes" rows={2} style={{ width: '100%', resize: 'vertical' }} /></div>
 
         {error && <div style={{ color: 'var(--red)', fontSize: 11, marginBottom: 12 }}>{error}</div>}
 
         <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-          <button type="button" className="btn-ghost" onClick={onClose}>Avbryt</button>
-          <button type="submit" className="btn-primary" disabled={!partNumber || loading}>{loading ? '…' : 'Legg til'}</button>
+          <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>
+          <button type="submit" className="btn-primary" disabled={!partNumber || loading}>{loading ? '…' : 'Add'}</button>
         </div>
       </form>
     </div>
