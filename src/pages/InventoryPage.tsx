@@ -12,12 +12,12 @@ import { createPart as apiCreatePart } from '../api/parts';
 import { useQueryClient } from '@tanstack/react-query';
 
 function exportCsv(parts: Part[]) {
-  const header = 'Delenummer,Antall,Navn,Leverandør,Lokasjon,Notater,Dato';
-  const rows = parts.map(p => [p.partNumber, p.quantity, p.name ?? '', p.vendor ?? '', p.location ?? '', p.notes ?? '', new Date(p.createdAt).toLocaleDateString('nb-NO')].join(','));
+  const header = 'Part Number,Quantity,Name,Vendor,Location,Notes,Date';
+  const rows = parts.map(p => [p.partNumber, p.quantity, p.name ?? '', p.vendor ?? '', p.location ?? '', p.notes ?? '', new Date(p.createdAt).toLocaleDateString('en-GB')].join(','));
   const blob = new Blob([[header, ...rows].join('\n')], { type: 'text/csv' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'varelager.csv';
+  a.download = 'inventory.csv';
   a.click();
 }
 
@@ -54,7 +54,7 @@ export default function InventoryPage() {
   const handleImportCsv = async (file: File) => {
     const text = await file.text();
     const rows = parseCsv(text);
-    if (rows.length === 0) { setImportStatus('Ingen gyldige rader funnet'); return; }
+    if (rows.length === 0) { setImportStatus('No valid rows found'); return; }
 
     const results = await Promise.allSettled(rows.map(row => apiCreatePart(row)));
     const succeeded = results.filter(r => r.status === 'fulfilled').length;
@@ -63,7 +63,7 @@ export default function InventoryPage() {
     qc.invalidateQueries({ queryKey: ['parts'] });
     qc.invalidateQueries({ queryKey: ['stats'] });
 
-    const msg = failed > 0 ? `Importerte ${succeeded} deler (${failed} feilet)` : `Importerte ${succeeded} deler`;
+    const msg = failed > 0 ? `Imported ${succeeded} parts (${failed} failed)` : `Imported ${succeeded} parts`;
     setImportStatus(msg);
     if (importTimerRef.current) clearTimeout(importTimerRef.current);
     importTimerRef.current = setTimeout(() => setImportStatus(''), 4000);
@@ -77,7 +77,7 @@ export default function InventoryPage() {
         <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           {stats && <StatsRow stats={stats} />}
           {isLoading
-            ? <div style={{ padding: '32px 16px', color: 'var(--muted)', textAlign: 'center' }}>Laster…</div>
+            ? <div style={{ padding: '32px 16px', color: 'var(--muted)', textAlign: 'center' }}>Loading…</div>
             : <PartsTable parts={parts} onAdd={() => setShowModal(true)} onUpdate={(id, data) => updatePart.mutate({ id, data })} onDelete={(id) => deletePart.mutate(id)} />
           }
         </main>

@@ -2,11 +2,11 @@
 export type Column = 'name' | 'location' | 'vendor' | 'notes' | 'createdAt';
 
 export const COLUMN_LABELS: Record<Column, string> = {
-  name: 'Navn',
-  location: 'Lokasjon',
-  vendor: 'Leverandør',
-  notes: 'Notater',
-  createdAt: 'Dato',
+  name: 'Name',
+  location: 'Location',
+  vendor: 'Vendor',
+  notes: 'Notes',
+  createdAt: 'Date',
 };
 
 interface Props {
